@@ -1,0 +1,29 @@
+{
+  "name": "monero-nodecount",
+  "version": "1.0.0",
+  "description": "A script that check and count active monero nodes, then save it in database",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./node_modules/geoip-lite/scripts/updatedb.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhz/monero-nodecount.git"
+  },
+  "keywords": [
+    "monero",
+    "nodes"
+  ],
+  "author": "Suhaimi Amir <suhaimi.hz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/suhz/monero-nodecount/issues"
+  },
+  "homepage": "https://github.com/suhz/monero-nodecount#readme",
+  "dependencies": {
+    "geoip-lite": "^1.2.1",
+    "portscanner": "^2.1.1",
+    "sequelize": "^3.30.4"
+  }
+}
