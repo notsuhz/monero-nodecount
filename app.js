@@ -26,11 +26,17 @@ const Nodes = sequelize.define('monero_nodes', {
     last_seen: {
         type: Sequelize.DATE
     },
+    status: {
+        type: Sequelize.INTEGER
+    },
     country: {
         type: Sequelize.STRING(3)
     },
-    status: {
-        type: Sequelize.INTEGER
+    lat: {
+        type: Sequelize.DECIMAL(10,8)
+    },
+    lng: {
+        type: Sequelize.DECIMAL(11,8)
     }
 }, {
     freezeTableName: true // Model tableName will be the same as the model name
@@ -65,6 +71,7 @@ peer_list.on('close', function(data) {
 
                 portscanner.checkPortStatus(port, ip).then(function(status) {
                     //console.log(status);
+                    const geoip_data = geoip.lookup(ip)
 
                     if (status == 'open') { //else closed
                         Nodes.findOne({
@@ -75,8 +82,10 @@ peer_list.on('close', function(data) {
                             if (node) {
                                 node.updateAttributes({
                                     last_seen: sequelize.fn('NOW'),
-                                    country: geoip.lookup(ip).country,
-                                    status: 1
+                                    status: 1,
+                                    country: geoip_data.country,
+                                    lat: geoip_data.ll[0],
+                                    lng: geoip_data.ll[1]
                                 })
                             } else {
                                 Nodes.create({
@@ -84,8 +93,10 @@ peer_list.on('close', function(data) {
                                     port: port,
                                     first_seen: sequelize.fn('NOW'),
                                     last_seen: sequelize.fn('NOW'),
-                                    country: geoip.lookup(ip).country,
-                                    status: 1
+                                    status: 1,
+                                    country: geoip_data.country,
+                                    lat: geoip_data.ll[0],
+                                    lng: geoip_data.ll[1]
                                 })
                             }
 
